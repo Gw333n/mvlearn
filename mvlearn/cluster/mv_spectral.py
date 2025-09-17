@@ -206,7 +206,7 @@ class MultiviewSpectralClustering(BaseCluster):
             neighbor = NearestNeighbors(n_neighbors=self.n_neighbors)
             neighbor.fit(X)
             sims = neighbor.kneighbors_graph(X).toarray()
-        elif self.affinity == 'pre-computed':
+        elif self.affinity == 'precomputed':
             sims = X
         elif callable(self.affinity):
             sims = cdist(X, X, self.affinity)
