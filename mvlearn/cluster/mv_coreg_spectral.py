@@ -10,7 +10,7 @@ from sklearn.cluster import KMeans
 
 from .mv_spectral import MultiviewSpectralClustering
 
-AFFINITY_METRICS = ['rbf', 'nearest_neighbors', 'poly']
+AFFINITY_METRICS = ['rbf', 'nearest_neighbors', 'poly', 'precomputed']
 
 
 class MultiviewCoRegSpectralClustering(MultiviewSpectralClustering):

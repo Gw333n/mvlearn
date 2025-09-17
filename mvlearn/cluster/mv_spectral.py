@@ -15,7 +15,7 @@ from sklearn.neighbors import NearestNeighbors
 from ..utils.utils import check_Xs
 from .base import BaseCluster
 
-AFFINITY_METRICS = ['rbf', 'nearest_neighbors', 'poly']
+AFFINITY_METRICS = ['rbf', 'nearest_neighbors', 'precomputed', 'poly']
 
 
 class MultiviewSpectralClustering(BaseCluster):
@@ -51,10 +51,10 @@ class MultiviewSpectralClustering(BaseCluster):
     n_init : int, optional, default=10
         The number of random initializations to use for k-means clustering.
 
-    affinity : string, optional, default='rbf'
-        The affinity metric used to construct the affinity matrix. Options
-        include 'rbf' (radial basis function), 'nearest_neighbors', and
-        'poly' (polynomial)
+    affinity : string or callable, optional, default='rbf'
+        The affinity metric used to construct the affinity matrix. If a string,
+        the similarity function can be 'rbf' (radial basis function),
+        'nearest_neighbors', 'poly' (polynomial) or 'precomputed'
 
     gamma : float, optional, default=None
         Kernel coefficient for rbf and polynomial kernels. If None then
@@ -206,6 +206,10 @@ class MultiviewSpectralClustering(BaseCluster):
             neighbor = NearestNeighbors(n_neighbors=self.n_neighbors)
             neighbor.fit(X)
             sims = neighbor.kneighbors_graph(X).toarray()
+        elif self.affinity == 'pre-computed':
+            sims = X
+        elif callable(self.affinity):
+            sims = cdist(X, X, self.affinity)
         else:
             sims = polynomial_kernel(X, gamma=gamma)
 
